@@ -1,0 +1,187 @@
+/*
+  
+ //zadaniye 1 
+ 
+#region enter
+Console.WriteLine("Enter value to compare with elements in array: ");
+int valueToCompare = Convert.ToInt32(Console.ReadLine());
+Array aboutValue = new();
+Console.WriteLine(aboutValue.Less(valueToCompare));
+Console.WriteLine(aboutValue.Greater(valueToCompare));
+#endregion
+
+#region interface
+public interface ICalc
+{
+    int Less(int valueToCompare);
+    int Greater(int valueToCompare);
+}
+#endregion
+
+#region class
+class Array : ICalc
+{
+    protected static int length = 5;
+    protected int[] arr = new int [length];
+
+    public int Less(int valueToCompare)
+    {
+        int count = 0;
+        for (int i = 0; i < length; i++)
+        {
+            Console.WriteLine($"Enter array[{i + 1}]: ");
+            arr[i] = Convert.ToInt32(Console.ReadLine());
+            if (arr[i] < valueToCompare)
+               count++; 
+            
+        }
+
+        Console.WriteLine("\nNumber of elements that are less than our value: ");
+        return count;
+    }
+    public int Greater(int valueToCompare)
+    {
+        int count = 0;
+        for (int i = 0; i < length; i++)
+        {
+            if (arr[i] > valueToCompare)
+                count++;
+        }
+
+        Console.WriteLine("\nNumber of elements that are greater than our value: ");
+        return count;
+    }
+}
+#endregion
+*/
+
+/*
+ //zadaniye 2 
+ 
+#region start
+Array aboutValue = new();
+aboutValue.ShowEven();
+aboutValue.ShowOdd();
+#endregion
+
+#region interface
+public interface IOutput2
+{
+    void ShowEven();
+    void ShowOdd();
+}
+#endregion
+
+#region class
+class Array : IOutput2
+{
+    protected static int length = 5;
+    protected int[] arr = new int[length];
+
+    public void ShowEven()
+    {
+        int count = 0, j = 0;
+        int[] arr_for_even = new int[length];
+        for (int i = 0; i < length; i++)
+        {
+            Console.WriteLine($"Enter array[{i + 1}]: ");
+            arr[i] = Convert.ToInt32(Console.ReadLine());
+            if (arr[i] % 2 == 0)
+            {
+                arr_for_even[j] = arr[i];
+                j++;
+            }
+        }
+
+        Console.WriteLine("Even numbers: ");
+        for (int i = 0; i < j; i++)
+            Console.WriteLine(arr_for_even[i]);
+        
+    }
+    public void ShowOdd()
+    {
+        Console.WriteLine("Odd numbers: ");
+        int count = 0, j = 0;
+        int[] arr_for_odd = new int[length];
+        for (int i = 0; i < length; i++)
+        {
+            if (arr[i] % 2 != 0)
+            {
+                arr_for_odd[j] = arr[i];
+                Console.WriteLine(arr_for_odd[j]);
+            }
+        }
+    }
+}
+#endregion
+*/
+
+/*
+//zadaniye 3
+
+#region enter
+Console.WriteLine("Enter value: ");
+int valueToCompare = Convert.ToInt32(Console.ReadLine());
+Array aboutValue = new();
+Console.WriteLine(aboutValue.CountDistinct());
+Console.WriteLine(aboutValue.EqualToValue(valueToCompare));
+#endregion
+
+#region interface
+public interface ICalc2
+{
+    int CountDistinct();
+    int EqualToValue(int valueToCompare);
+}
+#endregion
+
+#region class
+class Array : ICalc2
+{
+    protected static int length = 5;
+    protected int[] arr = new int[length];
+
+    public int CountDistinct()
+    {
+        int count = 0;
+        for (int i = 0; i < length; i++)
+        {
+            Console.WriteLine($"Enter array[{i + 1}]: ");
+            arr[i] = Convert.ToInt32(Console.ReadLine());
+        }
+
+        for (int i = 0; i < length; i++)
+        {
+            int flag = 0;
+            for (int j = 0; j < length; j++)
+            {
+                if (arr[i] == arr[j] && i != j)
+                {
+                    flag = 1;
+                    break;
+                }
+            }
+
+            if (flag == 0)
+                count++;
+
+        }
+
+        Console.WriteLine("\nUnique numbers in array: ");
+        return count;
+    }
+    public int EqualToValue(int valueToCompare)
+    {
+        int count = 0;
+        for (int i = 0; i < length; i++)
+        {
+            if (arr[i] == valueToCompare)
+                count++;
+        }
+
+        Console.WriteLine("\nNumber of elements that are equal to our value: ");
+        return count;
+    }
+}
+#endregion
+*/
