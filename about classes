@@ -1,0 +1,450 @@
+
+ namespace Problem_1
+{
+    class Money
+    {
+        string Currenty { get; set; }
+        int Purse_for_money { get; set; }
+        int Purse_for_penny { get; set; }
+
+        public double Sum_of_money(int purse_for_money, int purse_for_penny)
+        {
+            double all_money_info = purse_for_money + purse_for_penny / 100 + (purse_for_penny % 100) * 0.01;
+            
+            return all_money_info;
+        }
+    }
+
+    class Product : Money
+    {
+        int item = 1200;
+        string Currenty { get; set; }
+        int Purse_for_money { get; set; }
+        int Purse_for_penny { get; set; }
+
+        public Product(string currently, int purse_for_money, int purse_for_penny) : base() { this.Currenty = currently; this.Purse_for_money = purse_for_money; this.Purse_for_penny = purse_for_penny; }
+        
+        
+        public void Decrease_money()
+        {
+            Console.WriteLine("\nItem cost: " + item);
+
+         if (this.Purse_for_money < item)
+            {
+                this.item -= this.Purse_for_money; 
+            }
+         else
+                this.item -= 2;
+
+            Console.WriteLine("\nNow item cost: " + item + ":)");
+        }
+
+        public void Show()
+        {
+            Console.WriteLine($"\nThere are {Purse_for_money + Purse_for_penny / 100}.{Purse_for_penny % 100} {Currenty}");
+        }
+    }   
+    class Program
+    {
+        public static void Main()
+        {
+            Console.WriteLine("Enter currenty: "); //about currenty
+            string? currenty = Console.ReadLine();
+            string correct_currenty = currenty ?? "USD";
+
+            Console.WriteLine("Enter how much money without penny you want to put: "); //about money
+            int money = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter how much penny you want to put: "); // about penny 
+            int penny = Convert.ToInt32(Console.ReadLine()); 
+            
+            var my_product = new Product(correct_currenty, money, penny);
+            
+            my_product.Show();
+
+            my_product.Decrease_money(); 
+
+            Console.WriteLine($"\nSum of your money is {my_product.Sum_of_money(money, penny)} {correct_currenty}");
+
+        }
+    }
+}
+
+
+/*
+namespace Problem_2
+{
+    public enum Quality { LOW = 1, REGULAR, HIGH};
+    class Device
+    {
+        public string Name;
+        public Device() { }
+        public Device (string name)
+        {
+            this.Name = name;
+        }
+
+        public virtual void Sound() { Console.WriteLine("-sound of some device-"); }
+        public virtual void Show() { Console.WriteLine("-show of some device-"); }
+        public virtual void Desc() { Console.WriteLine("-descrition of some device-"); }
+
+    }
+    class Teapot : Device
+    {
+        public Teapot (string name, int for_quality) : base() { this.Name = name; this.Device_Quality = (Quality)(for_quality % 4); }
+
+        public string Name { get; set; }
+        public Quality Device_Quality { get; set; }
+        public override void Sound() 
+        {
+            Console.WriteLine("\nPSHIII!");
+        }
+        public void Show() 
+        { 
+            Console.WriteLine($"\nName of this Teapot: {Name}"); 
+        }
+        public void Desc()
+        {
+            Console.WriteLine($"\nThis is Teapot,\nName of it is {Name},\nand quality is {Device_Quality}");
+        }
+    }
+    class Microwave : Device
+    {
+        public Microwave(string name, int for_quality) : base() { this.Name = name; this.Device_Quality = (Quality)(for_quality % 4); }
+
+        public string Name { get; set; }
+        public Quality Device_Quality { get; set; }
+        public void Sound() 
+        {
+            Console.WriteLine("\nPIP, PIIP, PIIIIP!");
+        }
+        public void Show()
+        {
+            Console.WriteLine($"\nName of this Microwave: {Name}");
+        }
+        public void Desc()
+        {
+            Console.WriteLine($"\nThis is Microwave,\nName of it is {Name},\nand quality is {Device_Quality}");
+        }
+    }
+    class Car : Device
+    {
+        public Car(string name, int for_quality) : base() { this.Name = name; this.Device_Quality = (Quality)(for_quality % 4); }
+
+        public string Name { get; set; }
+        public Quality Device_Quality { get; set; }
+        public void Sound()
+        {
+            Console.WriteLine("\nBIP-BIP!");
+        }
+        public void Show()
+        {
+            Console.WriteLine($"\nName of this Car: {Name}");
+        }
+        public void Desc() 
+        {
+            Console.WriteLine($"\nThis is Car,\nName of it is {Name},\nand quality is {Device_Quality}");
+        }
+    }
+    class Steamship : Device
+    {
+        public Steamship(string name, int for_quality) : base() { this.Name = name; this.Device_Quality = (Quality)(for_quality % 4); }
+
+        public string Name { get; set; }
+        public Quality Device_Quality { get; set; }
+        public void Sound() 
+        {
+            Console.WriteLine("\nBIIIPP-BIIIIP!!!");
+        }
+        public void Show()
+        {
+            Console.WriteLine($"\nName of this Steamship: {Name}");
+        }
+        public void Desc()
+        {
+            Console.WriteLine($"\nThis is Steamship,\nName of it is {Name},\nand quality is {Device_Quality}");
+        }
+    }
+    class Program
+    {
+        public static void Main()
+        {
+            Console.WriteLine("What imstrument are you searching for:\n\nTeapot - enter \"1\",\nMicrowave - enter \"2\",\nCar - enter \"3\",\nStreamship - enter \"4\",\nfor others -enter \"5\":");
+            int choice = Convert.ToInt32(Console.ReadLine());
+            if (choice == 1)
+            {
+                var teapot = new Teapot("Amazing_time_with_tea", 1);
+                teapot.Sound();
+                teapot.Show();
+                teapot.Desc();
+            }
+            else if (choice == 2)
+            {
+                var microwave = new Microwave("Microwave_3000", 2);
+                microwave.Sound();
+                microwave.Show();
+                microwave.Desc();
+            }
+            else if (choice == 3)
+            {
+                var car = new Car("Toyota", 3);
+                car.Sound();
+                car.Show();
+                car.Desc();
+            }
+            else if (choice == 4)
+            {
+                var steamship = new Steamship("super_boat", 6);
+                steamship.Sound();
+                steamship.Show();
+                steamship.Desc();
+            }
+            else
+            {
+                Console.WriteLine("Sorry, we don't have this device:(");
+                Console.WriteLine("\nP.S. we could show you:");
+                var device = new Device("?");
+                device.Sound();
+                device.Show();
+                device.Desc();
+            }
+        }
+    }
+}
+*/
+
+/*
+namespace Problem_3
+{
+    public class Musical_Instrument
+    {
+        public string Name;
+        public Musical_Instrument() {}
+        Musical_Instrument(string name)
+        {
+            this.Name = name;
+        }
+
+        public virtual void Sound() { Console.WriteLine("-sound of musical instrument-"); }
+        public virtual void Show() { Console.WriteLine("-show of musical instrument-"); }
+        public virtual void Desc() { Console.WriteLine("-descrition of musical instrument-"); }
+
+        public virtual void History() { Console.WriteLine("-history of musical instrument-"); }
+    }
+    class Violin : Musical_Instrument
+    {
+        public Violin(string name, int year) : base() { this.Name = name; this.Year = year; }
+        public string Name { get; set; }
+        public int Year { get; set; }
+
+        public override void Sound()
+        {
+            Console.WriteLine("\n\nRe-La-Re-La-Re-La-La");
+        }
+        public override void Show()
+        {
+            Console.WriteLine($"\nName of this Violin: {Name}");
+        }
+        public override void Desc()
+        {
+            Console.WriteLine($"\nThis is Violin,\nName of it is {Name},\nWas created in {Year}");
+        }
+
+        public override void History()
+        {
+            Console.WriteLine($"\nThis Violin was created in {Year}.");
+        }
+    }
+    class Trombone : Musical_Instrument
+    {
+        public Trombone(string name, int year) : base() { this.Name = name; this.Year = year; }
+        public string Name { get; set; }
+        public int Year { get; set; }
+
+        public override void Sound()
+        {
+            Console.WriteLine("\n\nRe-La_Re-Mi");
+        }
+        public override void Show()
+        {
+            Console.WriteLine($"\nName of this Trombone: {Name}");
+        }
+        public override void Desc()
+        {
+            Console.WriteLine($"\nThis is Trombone,\nName of it is {Name},\nWas created in {Year}");
+        }
+
+        public override void History()
+        {
+            Console.WriteLine($"\nThis Trombone was created in {Year}.");
+        }
+    }
+    class Ukulele : Musical_Instrument
+    {
+        public Ukulele(string name, int year) : base() { this.Name = name; this.Year = year; }
+        public string Name { get; set; }
+        public int Year { get; set; }
+        public override void Sound()
+        {
+            Console.WriteLine("\n\nDo-Do-Re-Do");
+        }
+        public override void Show()
+        {
+            Console.WriteLine($"\nName of this Ukulele: {Name}");
+        }
+        public override void Desc()
+        {
+            Console.WriteLine($"\nThis is Ukulele,\nName of it is {Name},\nWas created in {Year}");
+        }
+
+        public override void History() 
+        { 
+            Console.WriteLine($"\nThis Ukulele was created in {Year}."); 
+        }
+    }
+    class ViolonCello : Musical_Instrument
+    {
+        public ViolonCello(string name, int year) : base() { this.Name = name; this.Year = year; }
+        public string Name { get; set; }
+        public int Year { get; set; }
+        public override void Sound()
+        {
+            Console.WriteLine("\n\nDo-Re-Mi-Mi");
+        }
+        public override void Show()
+        {
+            Console.WriteLine($"\nName of this Violoncello: {Name}");
+        }
+        public override void Desc()
+        {
+            Console.WriteLine($"\nThis is violoncelle,\nName of it is {Name},\nWas created in {Year}");
+        }
+
+        public override void History() 
+        {
+            Console.WriteLine($"\nThis violocello was created in {Year}.");
+        }
+    }
+    
+    class Program
+    {
+        public static void Main()
+        {
+            Console.WriteLine("What imstrument are you searching for:\n\nViolin - enter \"1\",\nTrombone - enter \"2\",\nUkulele - enter \"3\",\nViolencello - enter \"4\",\nfor others -enter \"5\":");
+            int choice = Convert.ToInt32(Console.ReadLine());
+            if (choice == 1)
+            {
+                var violin = new Violin("Vivaldi", 1850);
+                violin.Sound();
+                violin.Show();
+                violin.Desc();
+                violin.History();
+            }
+            else if (choice == 2)
+            {
+                Trombone trombone = new("Trombone_3000", 1970);
+                trombone.Sound();
+                trombone.Show();
+                trombone.Desc();
+                trombone.History();
+            }
+            else if (choice == 3)
+            {
+                Ukulele ukulele = new("Uku2", 2011);
+                ukulele.Sound();
+                ukulele.Show();
+                ukulele.Desc();
+                ukulele.History();
+            }
+            else if (choice == 4)
+            {
+                ViolonCello violonCello = new ("Violoncello_li_da", 1782);
+                violonCello.Sound();
+                violonCello.Show();
+                violonCello.Desc();
+                violonCello.History();
+            }
+            else
+                Console.WriteLine("Sorry, we don't have this musical instrument:(");
+        }
+    }
+}
+*/
+
+/*
+namespace Problem_4
+{
+    abstract class Worker // bazoviy class
+    {
+        public virtual void Print() {}
+    }
+
+#region classes
+
+class President : Worker // proizvodniy class President
+{
+    override public void Print()
+    {
+        Console.WriteLine("\nPRESIDENT - is a common title for the head of state in most republics.");
+    }
+}
+
+class Security : Worker // proizvodniy class Security
+{
+    override public void Print()
+    {
+        Console.WriteLine("\nSECURITY - quard is a person employed by a government or private party to protect the employing party's assets.");
+    }
+}
+
+class Manager : Worker // proizvodniy class Manager
+{
+    override public void Print()
+    {
+        Console.WriteLine("\nMANAGER - is a person who is responsible for a part of a business or organization.");
+    }
+}
+
+class Engineer : Worker // proizvodniy class Engineer
+{
+    public override void Print()
+    {
+        Console.WriteLine("\nENGINEER - is professional who invent, design, analyze, build and test machines, complex systems, structures, gadgets");
+        Console.WriteLine("and materials to fulfill functional objectives and requirements while considering the limitations imposed by practicality, regulation, safety and cost. ");    
+    }
+}
+#endregion
+
+    class Program
+    {
+        public static void Main()
+        {
+            Console.WriteLine("If you want to find information about:\n\nPresident - enter \"1\",\nSecurity - enter \"2\",\nManager - enter \"3\",\nEngineer - enter \"4\",\nfor others -enter \"5\":");
+            int choice = Convert.ToInt32(Console.ReadLine());
+            if (choice == 1)
+            {
+                President president = new ();
+                president.Print();
+            }
+            else if (choice == 2)
+            {
+                Security guard = new();
+                guard.Print();
+            }
+            else if (choice == 3)
+            {
+                Manager manager = new();
+                manager.Print();
+            }
+            else if (choice == 4)
+            {
+                Engineer engineer = new();
+                engineer.Print();
+            }
+            else
+                Console.WriteLine("Person who is doing his job.");
+        }
+    }
+
+}
+*/
