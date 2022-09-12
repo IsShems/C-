@@ -6,7 +6,14 @@
         string Currenty { get; set; }
         int Purse_for_money { get; set; }
         int Purse_for_penny { get; set; }
-
+        
+        public Money (string currently, int purse_for_money, int purse_for_penny)
+        {
+            this.Currenty = currently;
+            this.Purse_for_money = purse_for_money; 
+            this.Purse_for_penny = purse_for_penny;
+        }
+        
         public double Sum_of_money(int purse_for_money, int purse_for_penny)
         {
             double all_money_info = purse_for_money + purse_for_penny / 100 + (purse_for_penny % 100) * 0.01;
@@ -22,7 +29,7 @@
         int Purse_for_money { get; set; }
         int Purse_for_penny { get; set; }
 
-        public Product(string currently, int purse_for_money, int purse_for_penny) : base() { this.Currenty = currently; this.Purse_for_money = purse_for_money; this.Purse_for_penny = purse_for_penny; }
+        public Product(string currently, int purse_for_money, int purse_for_penny) : base(currently, purse_for_money, purse_for_penny) { this.Currenty = currently; this.Purse_for_money = purse_for_money; this.Purse_for_penny = purse_for_penny; }
         
         
         public void Decrease_money()
