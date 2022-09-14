@@ -1,0 +1,184 @@
+using System.IO;
+using System.Text.Json;
+
+//[Serializable]
+namespace Cash_Register
+{
+    class Product
+    {
+        public string? Name { get; set; }
+        public double Price { get; set; }
+        public int Count {get; set; } // kolichetvo etogo producta
+
+    public Product() {}
+        
+        public Product(string? name, double price, int count)
+        {
+            Name = name;
+            Price = price;
+            Count = count;
+        } 
+        //peregruzka umnojemiye
+        void buying(int number)
+        {
+            if (number > Count)
+            {
+                Console.WriteLine($"{Name}\t\t\t       {Count} ${Price}"); // esli vdrug vveli bolse chem est tovara to pokupayut ves tovar
+                this.Count = 0;
+            }
+            else
+            {
+                this.Count -= number;
+                Console.WriteLine($"{Name}\t\t\t       {number} ${Price}");
+            }
+        }
+    }
+
+    class Management : Product //dla productov
+    {
+        public static List<Product> Store = new(); //zdes budut zapisani vse producti kotoriye est v sklade
+        public static int length = 0;
+        public string? check { get; set; }
+        public static double total = 0;
+
+        public Management() : base() { }
+        public void Add(Product product)
+        {
+            Store.Add(product);
+        }
+
+        void Delete(Product product)
+        {
+            Store.Remove(product);
+        }
+
+        public void WhatIsInStore()
+        {
+            Console.WriteLine("\n\nStore: ");
+            foreach (var products_in_store in Store)
+            {
+                Console.WriteLine($"{products_in_store.Name} ${products_in_store.Price} -> in store: {products_in_store.Count}");
+            }
+            Console.WriteLine("\n");
+        }
+
+        public int SearchingInStore(string name)
+        {
+            int ind = -1;
+            foreach (var products_in_store in Store)
+            {
+                ind++;
+                if (products_in_store.Name == name)
+                    break;
+            }
+            return ind;
+        }
+
+        public void total_new()
+        {
+            total = 0;
+        }
+        public double total_out()
+        {
+            return total; 
+        }
+
+        public void for_check(int ind, int count)
+        {
+            total += count * Store[ind].Price;
+
+            if (count > Store[ind].Count)
+            {
+                this.check += $"{Store[ind].Name}\t\t\t       {Store.Count} ${count * Store[ind].Price}\n"; // esli vdrug vveli bolse chem est tovara to pokupayut ves tovar
+                Store[ind].Count = 0;
+            }
+            else
+            {
+                Store[ind].Count -= count;
+                this.check += $"{Store[ind].Name}\t\t\t       {count} ${count * Store[ind].Price}\n";
+            }
+        }
+
+        public void changecount(int ind, int count)
+        {
+            Store[ind].Count += count;
+        }
+
+        public string check_out()
+        {
+            return check;
+        }
+
+        public void new_check()
+        {
+            this.check = null;
+        }
+
+        public void Add_To_File(FileStream my_file, string? text_for_file)
+        {
+            JsonSerializer.Serialize(my_file, text_for_file);
+        }
+    }
+    class Program
+    {
+        public static void Main()
+        {
+            using var file = new FileStream("Cash_Register.json", FileMode.OpenOrCreate);
+            { 
+            Console.WriteLine("Hello! There are no products in store, enter \"1\" - to add product,\nenter \"0\" to finish with unploading products to store:");
+            int choice = 1;
+            var product_in_store = new Management();
+            while (choice != 0)  // stavim producti v sklad
+            {
+                Console.WriteLine(":");
+                choice = Convert.ToInt32(Console.ReadLine());
+                if (choice == 1)
+                {
+                    Console.WriteLine("Enter name of the product: ");
+                    string? name = Console.ReadLine();  
+                    Console.WriteLine("Enter price of the product: ");
+                    double price = Convert.ToDouble(Console.ReadLine());
+                    Console.WriteLine("Enter how many of them you add to store: ");
+                    int count = Convert.ToInt32(Console.ReadLine());
+                    var product = new Product(name, price, count);
+                    product_in_store.Add(product); 
+                }
+
+            }
+            product_in_store.WhatIsInStore();
+
+            Console.WriteLine("\nEnter \"1\" - to write a check, \nand enter \"-1\" - to end the program: ");
+                while (choice != -1)
+                {
+                    Console.WriteLine(":");
+                    choice = Convert.ToInt32(Console.ReadLine());
+                    if (choice == 1)
+                    {
+                        product_in_store.new_check();
+                        double total_price = 0;
+                        Console.WriteLine("\nEnter \"1\" - to continue writing check, \nand enter \"-1\" - to finish the check:");
+                        int product_for_buying = 1;
+                        while (product_for_buying != -1)
+                        {
+                            Console.WriteLine(":");
+                            product_for_buying = Convert.ToInt32(Console.ReadLine());
+                            if (product_for_buying == 1)
+                            {
+                                Console.WriteLine("Enter what person is bying: ");
+                                string? for_buying = Console.ReadLine();
+                                Console.WriteLine($"and enter how many person buying of {for_buying}:");
+                                int count_of_product = Convert.ToInt32(Console.ReadLine());
+                                product_in_store.for_check(product_in_store.SearchingInStore(for_buying), count_of_product);
+                            }
+                        }
+                        Console.WriteLine(product_in_store.check_out());
+                        Console.WriteLine($"---------------------------------------\ntotal\t\t\t\t{product_in_store.total_out()}"); // vivodim check v kompilator
+                        product_in_store.Add_To_File(file, product_in_store.check_out());
+                        product_in_store.Add_To_File(file, $"---------------------------------------\ntotal\t\t\t\t{product_in_store.total_out()}"); //vivodim check v file 
+                    }
+                }
+            }
+        }
+    }
+}
+
