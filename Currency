@@ -40,7 +40,6 @@ Serialize(res);
 void Serialize(string res)
 {
     using var file = new FileStream("data.json", FileMode.OpenOrCreate);
-    JsonSerializer.Serialize(file, my_converters[0].Amount + " " + my_converters[0].Currency + " -> " + my_converters[1].Currency);
     JsonSerializer.Serialize(file, res);
 }
 Console.WriteLine("All information is saved in file:)");
