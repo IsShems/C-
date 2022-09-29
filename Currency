@@ -1,0 +1,52 @@
+using System.Net;
+using System.Text.Json;
+
+Console.Write("Enter in what currency your money: "); //zdas nastroyem valutu
+string? line = Console.ReadLine();
+string from_cur = line ?? "AZN";
+string to_cur = " ";
+if (from_cur == "AZN")
+{
+    to_cur = "USD";
+}
+else
+{
+    to_cur = "AZN";
+}
+
+Console.Write("Enter how much money you want to change: "); // i summu kotoruyu vvedem vse sohranayetsa
+double money = Convert.ToDouble(Console.ReadLine());
+
+List<Converter> my_converters = new()
+{
+    new() { Currency = from_cur, Amount = money },
+    new() { Currency = to_cur }
+};
+
+WebClient client = new();
+
+var url = $"https://api.apilayer.com/exchangerates_data/convert?to=";
+
+client.Headers.Add("apikey", "nmM6p8fLYIBmYTmi6GqTJn7QN5qJrPUL");
+
+string link = $"{url}{my_converters[1].Currency}&from={my_converters[0].Currency}&amount={my_converters[0].Amount}"; // perevodim
+
+
+var res = client.DownloadString(link);
+Console.WriteLine(res);
+
+Serialize(res);
+
+void Serialize(string res)
+{
+    using var file = new FileStream("data.json", FileMode.OpenOrCreate);
+    JsonSerializer.Serialize(file, my_converters[0].Amount + " " + my_converters[0].Currency + " -> " + my_converters[1].Currency);
+    JsonSerializer.Serialize(file, res);
+}
+Console.WriteLine("All information is saved in file:)");
+
+public class Converter
+{
+    public string? Currency { get; set; }
+    public double Amount { get; set; }
+}
