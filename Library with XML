@@ -1,0 +1,99 @@
+using System.Net;
+using System.Xml.Serialization;
+
+namespace Library_program
+{
+    class Program
+    {
+        public static void Main()
+        {
+            LinkedList<String> my_list = new LinkedList<String>();
+            Console.Write("Hello:)\nif you want to add book - enter \"1\",\nif you want to delete book - enter \"2\",\nif you want to edit book - enter \"3\"\nand if you want to finish the programm - enter \"0\".");
+            int choice = -1;
+            while (choice != 0)
+            {
+                Console.Write("\n->  ");
+                choice = Convert.ToInt32(Console.ReadLine());
+                if (choice != 0)
+                {
+                    if (choice == 1)
+                    {
+                        Console.Write("\nWrite name of the book:\n>  ");
+                        string? book_name = Console.ReadLine();
+                        book_name = book_name ?? "Noname0";
+                        my_list.AddLast(book_name);
+                        Console.Write("\nWrite who is author of the book:\n>  ");
+                        string? book_author = Console.ReadLine();
+                        book_author = book_author ?? "Noname1"; 
+                        my_list.AddLast(book_author);
+                        // v liste u nas na chetnix indexsax imena knig na nechetnih avtori
+                    }
+                    else if (choice == 2)
+                    {
+                        
+                        Console.Write("\nWrite which book you want to delete:\n>  ");
+                        string? book_to_delete = Console.ReadLine();
+                        my_list.Remove(book_to_delete);
+                        Console.Write("\nWrite author of this book that you will delete:\n>  ");
+                        string? author_to_delete = Console.ReadLine();
+                        my_list.Remove(author_to_delete);
+                    }
+                    else // if choice == 3 
+                    {
+                        Console.Write("\nWrite which book or author you want to edit:\n>  ");
+                        string? book_to_edit = Console.ReadLine();
+                        Console.Write("\nWrite new name of book:\n>  ");
+                        string? new_name = Console.ReadLine();
+                        my_list.Find(book_to_edit).Value = new_name;
+                    }
+                }
+            }
+
+            WebClient client = new();
+
+            var url = $"https://api.apilayer.com/world_news/extract-news?url=";
+
+            client.Headers.Add("apikey", "nmM6p8fLYIBmYTmi6GqTJn7QN5qJrPUL");
+
+            string link = $"{url}&from={"Putin"}&analyze={"War"}"; //dobavlayem knigu s pomoshi api
+            
+
+            var res = client.DownloadString(link);
+            my_list.AddLast(res);
+            my_list.AddLast("API");
+            Console.WriteLine(res);
+
+            using var fs = new FileStream("data.xml", FileMode.OpenOrCreate);
+            try
+            {
+                var serializer = new XmlSerializer(typeof(LinkedList<string>));
+                serializer.Serialize(fs, res);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            #region Show Library
+            int turn = -1;
+            int for_library = 0;
+            Console.WriteLine("\n\nLibrary: ");
+            foreach (string about_book in my_list)
+            {
+                turn++;
+                if (turn % 2 == 0)
+                {
+                    Console.Write($"- - - - - - - - - - - - - - - - - -\n{++for_library}) {about_book} ");
+                }
+                else
+                {
+                    Console.Write($"{about_book}\n");
+                }
+            }
+            Console.WriteLine($"- - - - - - - - - - - - - - - - - -");
+            #endregion
+
+            my_list.Clear();
+        }
+    }
+}
