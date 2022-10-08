@@ -1,0 +1,526 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+class FunctionForQuiz
+{
+    public void Enterpr()
+    {
+        string acc_file = @"..\accounts.txt";
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("For LogIn - enter \"1\", for SignIn - enter \"2\"");
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine("If while loading program stopped working it's okey,\nsometimes it's happened just try to compile this program again:)\n");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write("> ");
+        int choice = Convert.ToInt32(Console.ReadLine());
+        if (choice == 2)
+        {
+            SignIn();
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Thread.Sleep(1000000);
+            Thread.Sleep(1000000);
+            Thread.Sleep(1000000);
+        }
+        else
+            LogIn(acc_file);
+    }
+
+    public async void SignIn()
+    {
+        Console.Write("Nickname: ");
+        string? tt = Console.ReadLine();
+        string name = tt ?? "   ";
+        Console.Write("Password: ");
+        tt = Console.ReadLine();
+        string parol = tt ?? " ";
+        Console.WriteLine("Date of birth:");
+        int year = 0;
+        while (year > 2022 || year < 1500)
+        {
+            Console.Write("Year  > ");
+            year = Convert.ToInt32(Console.ReadLine());
+        }
+        int month = 0;
+        while (month > 12 || month < 1)
+        {
+            Console.Write("Month > ");
+            month = Convert.ToInt32(Console.ReadLine());
+        }
+        int day = 0;
+        while (day > 31 || day < 1)
+        {
+            Console.Write("Day   > ");
+            day = Convert.ToInt32(Console.ReadLine());
+        }
+        var BirthDate = new DateTime(year, month, day);
+
+
+        string acc_file = @"..\accounts.txt";
+        using (StreamWriter writer = new StreamWriter(acc_file, true))
+        {
+            await writer.WriteLineAsync(name + "\n" + parol + "\n" + BirthDate);
+        }
+
+        string my_file = $"{name}.txt";
+        using (StreamWriter writer = new StreamWriter(my_file, true))
+        {
+            await writer.WriteLineAsync("~" + name + "~");
+        }
+
+        using (StreamReader reader = new StreamReader(acc_file))
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            string? nextline;
+            int count = 0;
+            bool check = false;
+            while ((nextline = await reader.ReadLineAsync()) != null)
+            {
+                if (check)
+                {
+                    if (nextline == parol)
+                    {
+                        Thread.Sleep(1000);
+                        Console.WriteLine("\nPassword in system:)");
+                        Menu(my_file, acc_file, name, parol, BirthDate);
+                        break;
+                    }
+                }
+                if (count % 3 == 1)
+                {
+
+                    if (nextline == name)
+                    {
+                        check = true;
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Thread.Sleep(1000);
+                        Console.WriteLine("\nNickname in system:)");
+                    }
+                }
+                count++;
+            }
+            if (check == false)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Account isn't verified:(");
+            }
+        }
+
+        TOP20("gir4542", 20);
+
+    }
+
+    public async void LogIn(string acc_file) 
+    {
+
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write("\nNickname: ");
+        string? tt = Console.ReadLine();
+        string name = tt ?? "   ";
+        Console.Write("Password: ");
+        tt = Console.ReadLine();
+        string parol = tt ?? " ";
+        Thread.Sleep(1000);
+        Console.Write("\n\nLoading");
+        Thread.Sleep(1000);
+        Console.Write(". ");
+        Thread.Sleep(1000);
+        Console.Write(". ");
+        Thread.Sleep(1000);
+        Console.Write(".\n\n ");
+        //proveryaem pravilno li
+        using (StreamReader reader = new StreamReader(acc_file))
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            string? nextline;
+            int count = 0;
+            bool check1 = false;
+            bool check2 = false;
+            var BirthDate = new DateTime(2000, 12, 2);
+            while ((nextline = await reader.ReadLineAsync()) != null)
+            {
+                if (check1)
+                {
+                    if (nextline == parol)
+                    {
+                        check2 = true;
+                        Thread.Sleep(1000);
+                        Console.WriteLine("\nPassword verified:)");
+                        Menu($"{name}.txt", acc_file, name, parol, BirthDate);
+                        break;
+                    }
+                    //break; 
+                    //on zakomentirovan potomu chto mi mojem pomenat parol, esli hotite stroguyu proverku i znayete cho ne budete menat parol mojete raskomentirovat
+                }
+                if (count % 3 == 1)
+                {
+                    if (nextline == name)
+                    {
+                        check1 = true;
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Thread.Sleep(1000);
+                        Console.WriteLine("\nNickname verified:)");
+                    }
+                }
+                count++;
+            }
+            if (check1 == false || check2 == false)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Account isn't verified:(");
+            }
+        }
+
+    }
+
+    public void Menu(string my_file, string acc_file, string name, string parol, DateTime BirthDate)
+    {
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine("\n~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("1.START NEW QUIZ\n2.HISTORY OF PREVIOUS RESULTS\n3.TOP 20\n4.SETTINGS");
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("\n\nEnter number(1-4):");
+        int choice = 0;
+        while (choice > 4 || choice < 1)
+        {
+            Console.Write("> ");
+            choice = Convert.ToInt32(Console.ReadLine());
+        }
+        if (choice == 1)
+            QUIZ(my_file, acc_file, name, parol, BirthDate);
+        else if (choice == 2)
+            Historyofgames(my_file, acc_file);
+        else if (choice == 3)
+            TOP20();
+        else //choice == 4
+            Settings(acc_file, name, parol, BirthDate);
+    }
+
+    public async void QUIZ(string my_file, string acc_file, string name, string parol, DateTime BirthDate)
+    {
+        Console.WriteLine("Hi! Are you ready for the quiz!?!!\nChoose which quiz would you like to take?");
+        Console.WriteLine("\n1.Literature\n2.Math\n3.Mix");
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine("P.S. in questions only 1 answer\n");
+        Console.ForegroundColor = ConsoleColor.White;
+        int choice = 0;
+        int result = 0;
+        while (choice > 3 || choice < 1)
+        {
+            Console.Write("> ");
+            choice = Convert.ToInt32(Console.ReadLine());
+        }
+
+        List<string> Quiz_ques = new List<string>();
+        #region Quiz_question
+        Quiz_ques.Add("Who wrote \"Sherlock Holmes\"?\n1)Bill Gates\n2)Arthur Conan Doyle\n3)Agatha Christi"); // 1
+        Quiz_ques.Add("Who Alice met before wonderland?\n1) Rabbit\n2) Lion\n3) Closet");
+        Quiz_ques.Add("What Antoine de Saint-Exupéry in \"The Little Prince\" drew in his chilhood?\n1)The Little Prince\n2)Rose on Little prince planet\n3)Elephant in Snake");
+        Quiz_ques.Add("Who was main character in wonderland?\n1) Alice\n2) Queen\n3) Rabbit");
+        Quiz_ques.Add("what is Ron's color of hair?\n1) Green\n2)Orange\n3) Brown");
+        Quiz_ques.Add("From what Romeo from \"Romeo and Julieta\" died?\n1) He killed himself with dagger of his beloved\n2) He died from sadness\n3) Romeo died from poison");
+        Quiz_ques.Add("Was Sherlock Holmes based on a real person?\n1)Yes\n2)No, but after Sherlock Holmes people found people like sherlock\n3) No.");
+        Quiz_ques.Add("Where Harry Potter studied?\n1)Hogwarts\n2)Normal School\n3) School of Owels");
+        Quiz_ques.Add("Did Gogol burned second book \"Dead Soulss\"?\n1)Yes\n2)No, but he tried\n3)NO! Who will do that!");
+        Quiz_ques.Add("Who was Harry Potter's friend?\n1)Ron\n2)Drako\n3)Volendemort"); // 10
+        Quiz_ques.Add("Who wrote \"The Little Prince\"?\n1) Anquit de Saint-Exupéry\n2) Antoine de Ceint-Exupéry\n3) Antoine de Saint-Exupéry");
+        Quiz_ques.Add("Who was Romeo last love?\n1) Hermiona\n2) Bill Gates\n3) Julieta");
+        Quiz_ques.Add("Who wrote \"The heart of a Dog\"?\n1) Mikhail Bulgakov\n2) Fyodor Dostoevsky\n3) Alexander Pushkin");
+        Quiz_ques.Add("What color was little prince scarf?\n1)Green\n2)Orange\n3)Yellow");
+        Quiz_ques.Add("Is Pushkin connected to Dead Souls?\n1) NO! Nikolai Cocol wrote it!!!\n2) Yes! Because it's his book.\n3) Yes, he created the idea of the book and give it to Gogol?");
+        Quiz_ques.Add("Where Sherlock Holmes lived?\n1)BB2\n2)221B\n3)211B");
+        Quiz_ques.Add("Is Dorian Grey didn't get older?\n1)Yes!!!\n2)Only in end of the book\n3)No");
+        Quiz_ques.Add("Did Artur Conan Doyle wrote a book?\n1)Yes\n2)No,He is an artist\n3)No");
+        Quiz_ques.Add("Who wrote \"The Picture of Dorian Gray\"?\n1) Willyam Gunskiy\n2)Oscar Wilde\n3)Bezil Killedman");
+        Quiz_ques.Add("How many novels did Oscar Wilde write?\n1)44\n2)5\n3)6"); // 20 - Literature
+        Quiz_ques.Add("2 + 2 = ?\n1) 3\n2) 4\n 3) 64");
+        Quiz_ques.Add("30x + 23 = -37, x = ?\n1) -2.5\n2) 1\n3) -2");
+        Quiz_ques.Add("(a + 3) * a = 40, a = ?\n1) 4\n2) 5\n3)-2");
+        Quiz_ques.Add("12 * 2 / 0 + 23 * 56 = ?\n1)1312\n2)There is no answer\n3)1288");
+        Quiz_ques.Add("3 + 5 * 20 = ?\n1) 193\n2) 103\n 3) 28");
+        Quiz_ques.Add("a * a * a * a = 81, a = ?\n1) 3\n2) 7\n3) 9");
+        Quiz_ques.Add("For a right triangle a^2 + b^2 = ?\n1) a + b\n2) c^2\n3) (a + b) * (a - b)");
+        Quiz_ques.Add("34 * 5 = ?\n1) 170\n2) 340\n3) 543");
+        Quiz_ques.Add("1 + 3 = ?\n1) 3\n2) 1\n3) 4");
+        Quiz_ques.Add("1 - 4 - 56  + 56 - 1\n1)- 4\n2) 62\n3) 0"); // 30
+        Quiz_ques.Add("12 * 12 = ?\n1) 134\n2) 144\n3) 24");
+        Quiz_ques.Add("3 + 5 * 20 = ?\n1) 193\n2) 103\n 3) 28");
+        Quiz_ques.Add("Continue the sequence:\n1, 1, 2, 3, 5, 8, 13, ...\n1) 21\n2) 18\n3) 20");
+        Quiz_ques.Add("36 = x^2, x = ?\n1) 3\n2) 9\n3) 6");
+        Quiz_ques.Add("3 * 7  + 8 = ?\n1) 21\n2) 32\n3) 29");
+        Quiz_ques.Add("Continue the sequence:\n1, 2, 6, 24, ...\n1) 48\n2) 120\n3) 20");
+        Quiz_ques.Add("1 + 1 + 1 + 1 + 1 + 1+ 1 * 11 + 1 + 1 + 1 + 1 = ?\n1) 20 2) 10 2) 21");
+        Quiz_ques.Add("23 - 3 = ?\n1) 20\n2) 3\n3) -20");
+        Quiz_ques.Add("Continue the sequence:\n1, 11, 21, 1211, 111221, ...\n1) 112112211\n2) 121121\n3) 312211");
+        Quiz_ques.Add("1 * 0 = ? :)\n1) 1\n2) 24\n3) 0"); //40 - Math
+        #endregion
+
+
+        if (choice == 1) //literature
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("\n~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine((i + 1) + "/20");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(Quiz_ques[i]);
+                choice = 0;
+                while (choice > 3 || choice < 1)
+                {
+                    Console.Write("> ");
+                    choice = Convert.ToInt32(Console.ReadLine());
+                }
+                if (Answers(Quiz_ques, i, choice))
+                    result++;
+            }
+        }
+        else if (choice == 2) //math
+        {
+            for (int i = 20; i < 40; i++)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("\n~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine((i + 1 - 20) + "/20");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(Quiz_ques[i]);
+                choice = 0;
+                while (choice > 3 || choice < 1)
+                {
+                    Console.Write("> ");
+                    choice = Convert.ToInt32(Console.ReadLine());
+                }
+                if (Answers(Quiz_ques, i, choice))
+                    result++;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("\n~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine((i + 1) + "/20");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Random rnd = new Random();
+                Console.WriteLine(Quiz_ques[rnd.Next(0, 39)]);
+                choice = 0;
+                while (choice > 3 || choice < 1)
+                {
+                    Console.Write("> ");
+                    choice = Convert.ToInt32(Console.ReadLine());
+                }
+
+                if (Answers(Quiz_ques, i, choice))
+                    result++;
+            }
+        } //mix
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("Your result is " + result);
+        using (StreamWriter writer = new StreamWriter(my_file, true))
+        {
+            await writer.WriteLineAsync(" - - - - - -\n   " + result);
+        }
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+        Console.ForegroundColor = ConsoleColor.White;
+        if (result == 20)
+        {
+            Console.WriteLine("Your place in the table of players: 1");
+            Console.WriteLine("OMG!!!Congratilations!!!");
+            TOP20(name, 20);
+        }
+        else if (result == 19 || result == 18)
+        {
+            Random rnd = new Random();
+            Console.WriteLine($"Your place in the table of players: {rnd.Next(23, 34)}");
+        }
+        else if (result < 18 && result >= 15)
+        {
+            Random rnd = new Random();
+            Console.WriteLine($"Your place in the table of players: {rnd.Next(35, 56)}");
+        }
+        else if(result < 15 && result >= 10)
+        {
+            Random rnd = new Random();
+            Console.WriteLine($"Your place in the table of players: {rnd.Next(57, 100)}");
+        }
+        else
+        {
+            Random rnd = new Random();
+            Console.WriteLine($"Your place in the table of players: {rnd.Next(100, 200)}");
+
+        }
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("Do you want to go back to menu?(1 - for yes, 2 - for no)");
+        choice = 0;
+        while (choice > 2 || choice < 1)
+        {
+            Console.Write("> ");
+            choice = Convert.ToInt32(Console.ReadLine());
+        }
+        if (choice == 1)
+            Menu(my_file, acc_file, name, parol, BirthDate);
+        //otpravit result v file all_res.txt
+        //dictionary name i result
+        //ili random(1,232) place in chart and if result 20 place = 1;
+    }
+
+    public async void Historyofgames(string my_file, string acc_file)
+    {
+        Console.WriteLine("\nYour History:");
+        Console.ForegroundColor = ConsoleColor.White;
+        string? text = null;
+        using (StreamReader readerr = new StreamReader(my_file))
+        {
+            text = await readerr.ReadToEndAsync();
+            Console.WriteLine(text);
+        }
+
+    }
+
+    async void TOP20(string name, int result = 0)
+    {
+        Console.WriteLine("Top20:");
+        string top20 = @"..\top20.txt";
+        int count = 0;
+        if (File.Exists(top20))
+            File.Delete(top20);
+        using (StreamWriter writer = new StreamWriter(top20, true))
+        {
+            if (result == 20)
+            {
+                count++;
+                await writer.WriteLineAsync(count + "." + name + " 20");
+            }
+            else
+            {
+                count++;
+                await writer.WriteLineAsync(count + ".Noname2 20\n");
+            }
+
+            await writer.WriteLineAsync(++count + ".Luu 20\n" + ++count + ".Dav_gamer 20\n" + ++count + ".Kerum 20\n" + ++count + ".Leyla 20\n" + ++count + ".Rafrum 20\n" +
+                                          ++count + ".Camil 20\n" + ++count + ".Elk 20\n" + ++count + ".Najavguru_r 20\n" + ++count + ".Drer 20\n" + ++count + ".Rafrum 20\n" +
+                                          ++count + ".RughtamKulut 20\n" + ++count + ".Whaaaaaaat 20\n" + ++count + ".Noname 20\n" + ++count + ".Bla-Bla 20\n" + ++count + ".Cat03 20\n" +
+                                          ++count + ".Ramran 20\n" + ++count + ".Emil 20\n" + ++count + ".423 20\n" + ++count + ".AAA 20\n");
+        }
+    }
+    async void TOP20()
+    {
+        Console.WriteLine("Top20:");
+        string top20 = @"..\top20.txt";
+        using (StreamReader readerr = new StreamReader(top20))
+        {
+            string? text = await readerr.ReadToEndAsync();
+            Console.WriteLine(text);
+        }
+
+    }
+
+    public async void Settings(string acc_file, string name, string parol, DateTime BirthDate)
+    {
+        Console.WriteLine("*SETTINGS*\n1.change password\n2.change birth date");
+        int choice = 0;
+        while (choice > 2 || choice < 1)
+        {
+            Console.Write("> ");
+            choice = Convert.ToInt32(Console.ReadLine());
+        }
+        if (choice == 1) // change password
+        {
+            Console.Write("\nEnter new password: \n> ");
+            string? new_parol = Console.ReadLine();
+            new_parol = new_parol ?? "password";
+            //string? text = "";
+            using (StreamWriter writer = new StreamWriter(acc_file, true))
+            {
+                await writer.WriteLineAsync(name + "\n" + new_parol + "\n" + BirthDate);
+            }
+            Console.WriteLine("Password succsefully changed");
+            
+            /*
+             * vtoroy sposob
+             * using (StreamReader reader = new StreamReader(acc_file))
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                string? nextline;
+                int count = 0;
+                while ((nextline = await reader.ReadLineAsync()) != null)
+                {
+                    text += nextline + "\n";
+                    count++;
+                }
+                text = text.Replace(parol, new_parol);
+                Console.WriteLine("Done!\n" + text);
+                change_parol_or_bd(acc_file, text);
+                
+            }*/
+            
+        }
+        else // change birth date
+        {
+            Console.WriteLine("\nEnter new Birth Date: ");
+            int year = 0;
+            while (year > 2022 || year < 1500)
+            {
+                Console.Write("Year  > ");
+                year = Convert.ToInt32(Console.ReadLine());
+            }
+            int month = 0;
+            while (month > 12 || month < 1)
+            {
+                Console.Write("Month > ");
+                month = Convert.ToInt32(Console.ReadLine());
+            }
+            int day = 0;
+            while (day > 31 || day < 1)
+            {
+                Console.Write("Day   > ");
+                day = Convert.ToInt32(Console.ReadLine());
+            }
+            var newBirthDate = new DateTime(year, month, day);
+            Console.WriteLine("BirthDate succesfully changed");
+            using (StreamWriter writer = new StreamWriter(acc_file, true))
+            {
+                await writer.WriteLineAsync(name + parol + newBirthDate);
+            }
+        }
+    }
+
+    public bool Answers(List<string> Quiz_ques, int i, int choice) // for quiz
+    {
+        bool answer = false;
+
+        if (i == 0 && choice == 2 || i == 1 && choice == 1 || i == 2 && choice == 3 || i == 3 && choice == 1 || i == 4 && choice == 2 || i == 5 && choice == 3 || i == 6 && choice == 1 || i == 7 && choice == 1 || i == 8 && choice == 1 || i == 9 && choice == 1 || i == 10 && choice == 3 || i == 11 && choice == 3 || i == 12 && choice == 1 || i == 13 && choice == 2 || i == 14 && choice == 3 || i == 15 && choice == 2 || i == 16 && choice == 1 || i == 17 && choice == 1 || i == 18 && choice == 2 || i == 19 && choice == 3)
+            answer = true;
+        else if (i == 20 && choice == 2 || i == 21 && choice == 3 || i == 22 && choice == 2 || i == 23 && choice == 2 || i == 24 && choice == 2 || i == 25 && choice == 1 || i == 26 && choice == 2 || i == 27 && choice == 1 || i == 28 && choice == 3 || i == 29 && choice == 1 || i == 30 && choice == 2 || i == 31 && choice == 2 || i == 32 && choice == 1 || i == 33 && choice == 1 || i == 34 && choice == 3 || i == 35 && choice == 2 || i == 36 && choice == 2 || i == 37 && choice == 1 || i == 38 && choice == 3 || i == 39 && choice == 3)
+            answer = true;
+        return answer;
+    }
+
+    public async void change_parol_or_bd (string acc_file, string text) // helping settings
+    {
+        using (StreamWriter writer = new StreamWriter(acc_file, false))
+        {
+            await writer.WriteLineAsync(text);
+        }
+    }
+};
