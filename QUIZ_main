@@ -1,0 +1,27 @@
+using ConsoleApp17;
+using System.IO;
+using System.Xml.Serialization;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace QUIZ
+{
+    class Program
+    {
+        public static void Main()
+        {
+            #region begining
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("\t\t\t\t\t\t\tQUIZ");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~\n\n ");
+            Console.ForegroundColor = ConsoleColor.White;
+            #endregion
+
+            FunctionForQuiz FuncForQuiz = new FunctionForQuiz();
+            FuncForQuiz.Enterpr();
+        }
+    }
+}
